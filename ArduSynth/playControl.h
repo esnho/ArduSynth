@@ -7,7 +7,8 @@
 #include "multibutton.h"
 #include "pots.h"
 
-int nowPlaying = 3;
+int nowPlaying = ROTATING_CUBE;
+int shiftDir = 2;
 
 bool clear = true;
 
@@ -32,6 +33,7 @@ void buttonPressed(int buttonID) {
   }
   if (buttonID == 5 || buttonID < 0) {
     randomize();
+    shiftDir = (shiftDir + 1) % 4;
   }
 }
 

@@ -94,59 +94,50 @@ void printcube(TVout TV, bool clear) {
   draw_cube(TV);
 }
 
-void drawCube(TVout TV, bool clear) {
-  int rsteps = random(10, 60);
-  int i = 0;
-  switch (random(6)) {
+int rsteps;
+int drawSteps = 0;
+int rotKind;
+
+void drawCube(TVout TV, bool clear) {  
+  if (drawSteps >= rsteps) {
+    rsteps = random(10, 60);
+    drawSteps = 0;
+    rotKind = random(6);
+  }
+  switch (rotKind) {
     case 0:
-      while (i < rsteps && nowPlaying == ROTATING_CUBE) {
         zrotate(angle);
         printcube(TV, clear);
-        i++;
-        readMultiButton();
-      }
+        drawSteps++;
       break;
     case 1:
-      while (i < rsteps && nowPlaying == ROTATING_CUBE) {
         zrotate(2 * PI - angle);
         printcube(TV, clear);
-        i++;
-        readMultiButton();
-      }
+        drawSteps++;
       break;
     case 2:
-      while (i < rsteps && nowPlaying == ROTATING_CUBE) {
         xrotate(angle);
         printcube(TV, clear);
-        i++;
-        readMultiButton();
-      }
+        drawSteps++;
       break;
     case 3:
-      while (i < rsteps && nowPlaying == ROTATING_CUBE) {
         xrotate(2 * PI - angle);
         printcube(TV, clear);
-        i++;
-        readMultiButton();
-      }
+        drawSteps++;
       break;
     case 4:
-      while (i < rsteps && nowPlaying == ROTATING_CUBE) {
         yrotate(angle);
         printcube(TV, clear);
-        i++;
-        readMultiButton();
-      }
+        drawSteps++;
       break;
     case 5:
-      while (i < rsteps && nowPlaying == ROTATING_CUBE) {
         yrotate(2 * PI - angle);
         printcube(TV, clear);
-        i++;
-        readMultiButton();
-      }
+        drawSteps++;
       break;
   }
+  
+  TV.delay_frame(1);
 }
 
 #endif

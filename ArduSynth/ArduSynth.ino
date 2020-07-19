@@ -14,13 +14,8 @@ void setup() {
 
   initializeBufferArray();
   TV.begin(PAL, 120, 96);
+  TV.noTone();
   // TV.select_font(font6x8);
-
-  /*TV.clear_screen();
-    circles(TV);*/
-
-  /*TV.clear_screen();
-    rectangles();*/
 
   //random cube forever.
   TV.clear_screen();
@@ -55,6 +50,7 @@ void loop() {
       drawLineFlow(TV);
   }
   readMultiButton();
+  TV.shift(potValNorm * 90, shiftDir);
 }
 
 int counter = 0;
@@ -73,49 +69,34 @@ void drawZero() {
   }
 }
 
+int gCirclesDir;
+int horCount;
+int vertCount;
+  int vertMax = 3;
+
 void drawGlitchCircles() {
-  int horCount = random(3, 40);
-  int vertCount = 3;
+  int horMax = random(3, 40);
   uint8_t radius = TV.vres() / random(5, 18);
-  int i = 0;
-  int j = 0;
-  while (i < horCount - 1 && nowPlaying == GLITCH_CIRCLES) {
-    j = 0;
-    while (j < vertCount && nowPlaying == GLITCH_CIRCLES) {
-      readMultiButton();
-      radius = TV.vres() / random(5, 18);
-      TV.draw_circle(
-        ((TV.hres() / horCount) * i) + radius,
-        ((TV.vres() / vertCount) * j) + radius,
-        radius, INVERT, INVERT);
-      // flash TV.draw_rect(0,0,TV.hres(),TV.vres(),INVERT, INVERT);
-      TV.delay_frame(2);
-      if (getClear()) {
-        TV.clear_screen();
-      }
-      j++;
-    }
+  if (vertCount < vertMax) {
+    readMultiButton();
+    radius = TV.vres() / random(5, 18);
+    TV.draw_circle(
+      ((TV.hres() / horMax) * horCount) + radius,
+      ((TV.vres() / vertMax) * vertCount) + radius,
+      radius, INVERT, INVERT);
+    // flash TV.draw_rect(0,0,TV.hres(),TV.vres(),INVERT, INVERT);
     TV.delay_frame(2);
-    i++;
-  }
-  horCount = 43 - horCount;
-  i = horCount - 1;
-  while (i > 0 && nowPlaying == GLITCH_CIRCLES) {
-    j = 0;
-    while (j < vertCount && nowPlaying == GLITCH_CIRCLES) {
-      readMultiButton();
-      TV.draw_circle(
-        ((TV.hres() / horCount) * i) + radius,
-        ((TV.vres() / vertCount) * j) + radius,
-        radius, INVERT, INVERT);
-      TV.delay_frame(2);
-      if (getClear()) {
-        TV.clear_screen();
-      }
-      j++;
+    if (getClear()) {
+      TV.clear_screen();
     }
+    vertCount++;
+  } else if (horCount < horMax) {
+    Serial.println("seconda branch");
+    vertCount = 0;
     TV.delay_frame(2);
-    i--;
+    horCount++;
+  } else {
+    horCount = 0;
+    vertCount = 0;
   }
-  TV.clear_screen();
 }
